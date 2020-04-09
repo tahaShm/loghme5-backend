@@ -2,6 +2,7 @@ package com.loghme.loghme5b.repo.schedulers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loghme.loghme5b.repo.utils.Food;
 import com.loghme.loghme5b.repo.utils.Loghme;
 import com.loghme.loghme5b.repo.utils.Restaurant;
 
@@ -44,6 +45,16 @@ public class RestaurantsScheduler implements ServletContextListener {
                 loghme.getCustomer().setPhoneNumber("+989300323231");
                 loghme.getCustomer().setEmail("hoomch@gmail.com");
                 loghme.getCustomer().setCredit(100000);
+
+                for (Restaurant restaurant: loghme.getRestaurants()) {
+                    System.out.println("---Restaurant Name---");
+                    System.out.println(restaurant.getName());
+                    System.out.println(restaurant.getId());
+                    System.out.println("---Menu---");
+                    for (Food food: restaurant.getMenu()) {
+                        System.out.println(food.getName());
+                    }
+                }
                 return 0;
             }
         }, 0, TimeUnit.SECONDS);

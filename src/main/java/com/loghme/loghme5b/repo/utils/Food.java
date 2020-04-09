@@ -16,6 +16,8 @@ public class Food {
     private String image;
     private int price;
 
+    public String toString() { return name; }
+
     public String getName() {
         return name;
     }

@@ -150,42 +150,9 @@ public class Loghme
             throw new RestaurantNotFoundExp();
     }
 
-//    public void addToCart(String jsonData) throws RestaurantNotFoundExp, FoodFromOtherRestaurantInCartExp, FoodNotFoundExp, IOException{
-//        boolean allowToAdd = false;
-//        ObjectMapper nameMapper = new ObjectMapper();
-//        Names newName = nameMapper.readValue(jsonData, Names.class);
-//        String restaurantName = newName.getRestaurantName();
-//
-//        if (!customer.isRestaurantSet())
-//            allowToAdd = true;
-//        else {
-//            String currentRestaurantName = customer.getRestaurantName();
-//            if (currentRestaurantName.equals(restaurantName))
-//                allowToAdd = true;
-//        }
-//
-//        if (allowToAdd) {
-//            int index = getIndexOfRestaurant(jsonData, 1);
-//
-//            String foodName = newName.getFoodName();
-//
-//            if (index >= 0){
-//                if (restaurants.get(index).isFoodValid(foodName)) {
-//                    customer.addFoodToCart(foodName, restaurantName);
-//                }
-//                else
-//                    throw new FoodNotFoundExp();
-//            }
-//            else
-//                throw new RestaurantNotFoundExp();
-//        }
-//        else {
-//            throw new FoodFromOtherRestaurantInCartExp();
-//        }
-//    }
-
-    public void addToCart(Food food, Restaurant restaurant) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp {
+    public void addToCart(Restaurant restaurant, String foodName, int count) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp, FoodNotFoundExp {
         boolean allowToAdd = false;
+        Food food = getFoodByName(foodName, restaurant);
         if (customer.getCurrentOrder() == null) {
             Order newOrder = new Order(lastOrderId, restaurant);
             customer.setCurrentOrder(newOrder);
@@ -200,7 +167,7 @@ public class Loghme
             if (food instanceof PartyFood)
                 customer.addPartyFoodToCurrentOrder((PartyFood) food);
             else
-                customer.addFoodToCurrentOrder(food);
+                customer.addFoodToCurrentOrder(food, count);
         }
         else
             throw new FoodFromOtherRestaurantInCartExp();
@@ -313,7 +280,7 @@ public class Loghme
         customer.clearCurrentPartyFoods();
     }
 
-    public void     addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
+    public void addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
         deletePreviousPartyFoods();
         deletePreviousCustomerPartyFoods();
         for (Restaurant restaurant: partyRestaurants) {

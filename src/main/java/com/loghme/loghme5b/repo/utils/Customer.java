@@ -72,6 +72,12 @@ public class Customer {
         currentOrder.addFood(food);
     }
 
+    public void addFoodToCurrentOrder(Food food, Integer count) {
+        for (int i = 0; i < count; i++) {
+            currentOrder.addFood(food);
+        }
+    }
+
     public void addPartyFoodToCurrentOrder(PartyFood partyFood) throws ExtraFoodPartyExp {
         if (currentOrder.getPartyFoods().containsKey(partyFood))
             if (currentOrder.getPartyFoods().get(partyFood) + 1 > partyFood.getCount())
