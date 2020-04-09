@@ -3,6 +3,8 @@ package com.loghme.loghme5b.repo.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loghme.loghme5b.repo.schedulers.CouriersScheduler;
 import com.loghme.loghme5b.repo.utils.exceptions.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.*;
@@ -251,6 +253,11 @@ public class Loghme
 
     public void addCredit(int credit) {
         customer.addCredit(credit);
+    }
+
+    public void addCredit(String json) throws JSONException {
+        JSONObject obj = new JSONObject(json);
+        customer.addCredit(obj.getInt("credit"));
     }
 
 //    public int getPrice(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
