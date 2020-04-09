@@ -173,6 +173,13 @@ public class Loghme
             throw new FoodFromOtherRestaurantInCartExp();
     }
 
+    public void removeFromCart(Restaurant restaurant, String foodName, int count) throws FoodFromOtherRestaurantInCartExp, NotEnoughFoodToDelete, FoodNotFoundExp {
+        if (!restaurant.getId().equals(customer.getCurrentOrder().getRestaurant().getId()))
+            throw new FoodFromOtherRestaurantInCartExp();
+        Food food = getFoodByName(foodName, restaurant);
+        customer.removeFoodFromCurrentOrder(food, count);
+    }
+
     public String getCartJson() throws IOException {
         return customer.getCartJson();
     }
@@ -232,20 +239,6 @@ public class Loghme
         JSONObject obj = new JSONObject(json);
         customer.addCredit(obj.getInt("credit"));
     }
-
-//    public int getPrice(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
-//        if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
-//            throw new BadRequest400Exp();
-//        Restaurant restaurant = getRestaurantById(customer.getRestaurantId());
-//        int foodPrice = restaurant.sendFoodPriceByName(foodName);
-//        return foodPrice;
-//    }
-//
-//    public int getQuantity(String foodName) throws BadRequest400Exp, NotFound404Exp, FoodNotFoundExp {
-//        if (!customer.isRestaurantSet() || customer.getFoodCart().isEmpty())
-//            throw new BadRequest400Exp();
-//        return customer.getFoodQuantity(foodName);
-//    }
 
     public boolean isRestaurantInRange(String id, float distance) throws NotFound404Exp {
         Restaurant restaurant = getRestaurantById(id);

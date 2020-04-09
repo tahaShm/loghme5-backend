@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loghme.loghme5b.repo.utils.exceptions.ExtraFoodPartyExp;
+import com.loghme.loghme5b.repo.utils.exceptions.FoodNotFoundExp;
+import com.loghme.loghme5b.repo.utils.exceptions.NotEnoughFoodToDelete;
 import com.loghme.loghme5b.repo.utils.exceptions.OrderNotFound;
 
 import java.io.IOException;
@@ -76,6 +78,10 @@ public class Customer {
         for (int i = 0; i < count; i++) {
             currentOrder.addFood(food);
         }
+    }
+
+    public void removeFoodFromCurrentOrder(Food food, int count) throws FoodNotFoundExp, NotEnoughFoodToDelete {
+        currentOrder.removeFood(food, count);
     }
 
     public void addPartyFoodToCurrentOrder(PartyFood partyFood) throws ExtraFoodPartyExp {

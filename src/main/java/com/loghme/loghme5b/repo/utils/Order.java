@@ -1,5 +1,8 @@
 package com.loghme.loghme5b.repo.utils;
 
+import com.loghme.loghme5b.repo.utils.exceptions.FoodNotFoundExp;
+import com.loghme.loghme5b.repo.utils.exceptions.NotEnoughFoodToDelete;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +47,19 @@ public class Order {
             foods.put(food, foods.get(food) + 1);
         else
             foods.put(food, 1);
+    }
+
+    public void removeFood(Food food, int count) throws FoodNotFoundExp, NotEnoughFoodToDelete {
+        if (foods.containsKey(food)) {
+            if (count > foods.get(food))
+                throw new NotEnoughFoodToDelete();
+            else if (foods.get(food) == count)
+                foods.remove(food);
+            else
+                foods.put(food, foods.get(food) - count);
+        }
+        else
+            throw new FoodNotFoundExp();
     }
 
     public void addPartyFood(PartyFood partyFood) {
