@@ -1,5 +1,6 @@
 package com.loghme.loghme5b.service;
 
+import com.loghme.loghme5b.BadRequestException;
 import com.loghme.loghme5b.repo.utils.Loghme;
 import org.json.JSONException;
 import org.springframework.http.HttpEntity;
@@ -21,7 +22,7 @@ public class CreditService {
             loghme.addCredit(httpEntity.getBody());
         }
         catch (JSONException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new BadRequestException();
         }
         return ResponseEntity.ok(null);
     }

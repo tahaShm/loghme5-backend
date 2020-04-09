@@ -150,6 +150,11 @@ public class Loghme
             throw new RestaurantNotFoundExp();
     }
 
+    public ArrayList<Food> getRestaurantFoods(String id) throws NotFound404Exp {
+        Restaurant restaurant = getRestaurantById(id);
+        return restaurant.getMenu();
+    }
+
     public void addToCart(Restaurant restaurant, String foodName, int count) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp, FoodNotFoundExp {
         boolean allowToAdd = false;
         Food food = getFoodByName(foodName, restaurant);
