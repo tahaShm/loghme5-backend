@@ -3,6 +3,7 @@ package com.loghme.loghme5b.repo.utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loghme.loghme5b.repo.utils.exceptions.ExtraFoodPartyExp;
 import com.loghme.loghme5b.repo.utils.exceptions.OrderNotFound;
 
 import java.io.IOException;
@@ -71,6 +72,13 @@ public class Customer {
         currentOrder.addFood(food);
     }
 
+    public void addPartyFoodToCurrentOrder(PartyFood partyFood) throws ExtraFoodPartyExp {
+        if (currentOrder.getPartyFoods().containsKey(partyFood))
+            if (currentOrder.getPartyFoods().get(partyFood) + 1 > partyFood.getCount())
+                throw new ExtraFoodPartyExp();
+        currentOrder.addPartyFood(partyFood);
+    }
+
     public void emptyCurrentOrder() {currentOrder = null;}
 
     public String getCartJson() throws JsonParseException, JsonMappingException, IOException {
@@ -93,5 +101,13 @@ public class Customer {
 
     public int cartOverallPrice() {
         return currentOrder.overallPrice();
+    }
+
+    public void clearCurrentPartyFoods() {
+        if (currentOrder != null) {
+            currentOrder.clearPartyFoods();
+            if (currentOrder.getFoods().size() == 0)
+                currentOrder = null;
+        }
     }
 }

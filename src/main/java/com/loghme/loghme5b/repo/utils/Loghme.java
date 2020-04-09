@@ -28,7 +28,7 @@ public class Loghme
         return singleApp;
     }
 
-    public void setRestaurants(ArrayList<Restaurant> inRestaurants) { restaurants = inRestaurants; }
+    public void setRestaurants(ArrayList<Restaurant> inRestaurants) { restaurants.addAll(inRestaurants); }
 
     public ArrayList<Restaurant> getRestaurants() {
         return restaurants;
@@ -184,7 +184,7 @@ public class Loghme
 //        }
 //    }
 
-    public void addToCart(Food food, Restaurant restaurant) throws FoodFromOtherRestaurantInCartExp {
+    public void addToCart(Food food, Restaurant restaurant) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp {
         boolean allowToAdd = false;
         if (customer.getCurrentOrder() == null) {
             Order newOrder = new Order(lastOrderId, restaurant);
@@ -197,7 +197,10 @@ public class Loghme
                 allowToAdd = true;
         }
         if (allowToAdd) {
-            customer.addFoodToCurrentOrder(food);
+            if (food instanceof PartyFood)
+                customer.addPartyFoodToCurrentOrder((PartyFood) food);
+            else
+                customer.addFoodToCurrentOrder(food);
         }
         else
             throw new FoodFromOtherRestaurantInCartExp();
@@ -207,13 +210,16 @@ public class Loghme
         return customer.getCartJson();
     }
 
-    public void finalizeOrder() throws NotEnoughCreditExp {
+    public void finalizeOrder() throws NotEnoughCreditExp, ExtraFoodPartyExp {
         int cartPrice = customer.cartOverallPrice();
+        Restaurant currentRestaurant = customer.getCurrentOrder().getRestaurant();
         if (cartPrice > customer.getCredit()) {
+//            currentRestaurant.restorePreviousPartyCounts(customer.getCurrentOrder());
             customer.emptyCurrentOrder();
+
             throw new NotEnoughCreditExp();
         }
-
+        currentRestaurant.reducePartyFoodAmounts(customer.getCurrentOrder());
         customer.getCurrentOrder().setStatus("finding delivery");
 
         Timer timer = new Timer();
@@ -287,13 +293,47 @@ public class Loghme
         throw new FoodNotFoundExp();
     }
 
-    public void addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
-        for (Restaurant restaurant: partyRestaurants) {
-            for (PartyFood food: restaurant.getPartyFoods()) {
-                System.out.println(food.getName());
-                System.out.println(food.getNewPrice());
-                System.out.println(food.getCount());
+    public PartyFood getPartyFoodByName(String foodName, Restaurant restaurant) {
+        for (PartyFood partyFood: restaurant.getPartyFoods()) {
+            if (partyFood.getName().equals(foodName))
+                return partyFood;
+        }
+        return null;
+    }
+
+    public void deletePreviousPartyFoods(){
+        for (Restaurant restaurant: restaurants) {
+            if (restaurant.getPartyFoods().size() > 0) {
+                restaurant.deletePartyFoods();
             }
         }
+    }
+
+    private void deletePreviousCustomerPartyFoods() {
+        customer.clearCurrentPartyFoods();
+    }
+
+    public void     addPartyRestaurants(ArrayList<Restaurant> partyRestaurants) {
+        deletePreviousPartyFoods();
+        deletePreviousCustomerPartyFoods();
+        for (Restaurant restaurant: partyRestaurants) {
+            Restaurant currentRestaurant = null;
+            try {
+                currentRestaurant = getRestaurantById(restaurant.getId());
+            } catch (NotFound404Exp notFound404Exp) {
+                currentRestaurant = restaurant;
+                restaurants.add(restaurant);
+            }
+            currentRestaurant.updateMenu();
+        }
+    }
+
+    public ArrayList<Restaurant> getClosePartyRestaurants(float distance){
+        ArrayList<Restaurant> closeRestaurants = getCloseRestaurants(distance);
+        ArrayList<Restaurant> closePartyRestaurants = new ArrayList<>();
+        for (Restaurant restaurant: closeRestaurants)
+            if (restaurant.getPartyFoods().size() > 0)
+                closePartyRestaurants.add(restaurant);
+        return closePartyRestaurants;
     }
 }

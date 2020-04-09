@@ -1,12 +1,13 @@
 package com.loghme.loghme5b.repo.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loghme.loghme5b.repo.utils.exceptions.ExtraFoodPartyExp;
 import com.loghme.loghme5b.repo.utils.exceptions.FoodAlreadyExistsExp;
 import com.loghme.loghme5b.repo.utils.exceptions.FoodNotFoundExp;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Restaurant {
     private String id;
@@ -130,5 +131,55 @@ public class Restaurant {
                 return food.getPrice();
 
         throw new FoodNotFoundExp();
+    }
+
+    public void updateMenu() {
+        for (PartyFood partyFood: partyFoods) {
+            if (foodIdx(partyFood.getName()) == -1) {
+                Food newFood = new Food();
+                newFood.setName(partyFood.getName());
+                newFood.setDescription(partyFood.getDescription());
+                newFood.setImage(partyFood.getImage());
+                newFood.setPopularity(partyFood.getPopularity());
+                newFood.setPrice(partyFood.getPrice());
+                menu.add(newFood);
+            }
+        }
+    }
+
+    public void deletePartyFoods() {
+        partyFoods.clear();
+    }
+
+    public void restorePreviousPartyCounts(Order currentOrder) {
+        for (Map.Entry<PartyFood, Integer> entry: currentOrder.getPartyFoods().entrySet()) {
+            PartyFood currentPartyFood = sendPartyFoodByName(entry.getKey().getName());
+            if (currentPartyFood != null)
+                currentPartyFood.setCount(currentPartyFood.getCount() + entry.getValue()); //restore previous number of current party food
+        }
+    }
+
+    private PartyFood sendPartyFoodByName(String currentPartyFoodName) {
+        for (PartyFood partyFood: partyFoods) {
+            if (partyFood.getName().equals(currentPartyFoodName)) {
+                return partyFood;
+            }
+        }
+        return null;
+    }
+
+    public void reducePartyFoodAmounts(Order currentOrder) throws ExtraFoodPartyExp {
+        for (Map.Entry<PartyFood, Integer> entry: currentOrder.getPartyFoods().entrySet()) {
+            PartyFood currentPartyFood = sendPartyFoodByName(entry.getKey().getName());
+            if (currentPartyFood != null)
+                if (currentPartyFood.getCount() < entry.getValue())
+                    throw new ExtraFoodPartyExp();
+//                currentPartyFood.setCount(currentPartyFood.getCount() + entry.getValue()); //restore previous number of current party food
+        }
+        for (Map.Entry<PartyFood, Integer> entry: currentOrder.getPartyFoods().entrySet()) {
+            PartyFood currentPartyFood = sendPartyFoodByName(entry.getKey().getName());
+            if (currentPartyFood != null)
+                currentPartyFood.setCount(currentPartyFood.getCount() - entry.getValue());
+        }
     }
 }
