@@ -1,5 +1,10 @@
 package com.loghme.loghme5b.repo.schedulers;
 
+import com.loghme.loghme5b.repo.utils.Food;
+import com.loghme.loghme5b.repo.utils.Loghme;
+import com.loghme.loghme5b.repo.utils.PartyFood;
+import com.loghme.loghme5b.repo.utils.Restaurant;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -14,7 +19,7 @@ public class PartyScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new PartySchedulerRunnable(), 0, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new PartySchedulerRunnable(), 0, 3, TimeUnit.MINUTES);
     }
 
     @Override

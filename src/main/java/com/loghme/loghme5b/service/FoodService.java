@@ -4,9 +4,6 @@ import com.loghme.loghme5b.BadRequestException;
 import com.loghme.loghme5b.repo.utils.Food;
 import com.loghme.loghme5b.repo.utils.Loghme;
 import com.loghme.loghme5b.repo.utils.Restaurant;
-import org.json.JSONException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +22,7 @@ public class FoodService {
             @RequestParam(value = "count") int count) {
         try {
             Restaurant restaurant = loghme.getRestaurantById(id);
-            loghme.addToCart(restaurant, foodName, count);
+            loghme.addToCart(restaurant, foodName, count, false);
         }
         catch (Exception e) {
             throw new BadRequestException();
@@ -41,7 +38,7 @@ public class FoodService {
             @RequestParam(value = "count") int count) {
         try {
             Restaurant restaurant = loghme.getRestaurantById(id);
-            loghme.removeFromCart(restaurant, foodName, count);
+            loghme.removeFromCart(restaurant, foodName, count, false);
         }
         catch (Exception e) {
             throw new BadRequestException();

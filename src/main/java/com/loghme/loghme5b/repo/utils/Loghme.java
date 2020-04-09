@@ -155,7 +155,7 @@ public class Loghme
         return restaurant.getMenu();
     }
 
-    public void addToCart(Restaurant restaurant, String foodName, int count) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp, FoodNotFoundExp {
+    public void addToCart(Restaurant restaurant, String foodName, int count, boolean isPartyFood) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp, FoodNotFoundExp {
         boolean allowToAdd = false;
         Food food = getFoodByName(foodName, restaurant);
         if (customer.getCurrentOrder() == null) {
@@ -169,7 +169,7 @@ public class Loghme
                 allowToAdd = true;
         }
         if (allowToAdd) {
-            if (food instanceof PartyFood)
+            if (food instanceof PartyFood && isPartyFood)
                 customer.addPartyFoodToCurrentOrder((PartyFood) food);
             else
                 customer.addFoodToCurrentOrder(food, count);
@@ -178,10 +178,14 @@ public class Loghme
             throw new FoodFromOtherRestaurantInCartExp();
     }
 
-    public void removeFromCart(Restaurant restaurant, String foodName, int count) throws FoodFromOtherRestaurantInCartExp, NotEnoughFoodToDelete, FoodNotFoundExp {
+    public void removeFromCart(Restaurant restaurant, String foodName, int count, boolean isPartyFood) throws FoodFromOtherRestaurantInCartExp, NotEnoughFoodToDelete, FoodNotFoundExp {
         if (!restaurant.getId().equals(customer.getCurrentOrder().getRestaurant().getId()))
             throw new FoodFromOtherRestaurantInCartExp();
-        Food food = getFoodByName(foodName, restaurant);
+        Food food;
+        if (isPartyFood)
+            food = getPartyFoodByName(foodName, restaurant);
+        else
+            food = getFoodByName(foodName, restaurant);
         customer.removeFoodFromCurrentOrder(food, count);
     }
 
@@ -291,6 +295,18 @@ public class Loghme
             }
             currentRestaurant.updateMenu();
         }
+//        for (Restaurant restaurant: getRestaurants()) {
+//            System.out.println("---Restaurant Name---");
+//            System.out.println(restaurant.getName());
+//            System.out.println(restaurant.getId());
+//            System.out.println("---Menu---");
+//            for (Food food: restaurant.getMenu()) {
+//                if (food instanceof PartyFood)
+//                    System.out.println("party food: " + food.getName());
+//                else
+//                    System.out.println(food.getName());
+//            }
+//        }
     }
 
     public ArrayList<Restaurant> getClosePartyRestaurants(float distance){
@@ -300,5 +316,14 @@ public class Loghme
             if (restaurant.getPartyFoods().size() > 0)
                 closePartyRestaurants.add(restaurant);
         return closePartyRestaurants;
+    }
+
+    public ArrayList<PartyFood> getPartyFoods() {
+        ArrayList<PartyFood> foods = new ArrayList<>();
+        for (Restaurant restaurant: restaurants) {
+            if (restaurant.getPartyFoods() != null)
+                foods.addAll(restaurant.getPartyFoods());
+        }
+        return foods;
     }
 }

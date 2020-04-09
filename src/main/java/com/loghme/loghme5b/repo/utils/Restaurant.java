@@ -143,6 +143,9 @@ public class Restaurant {
                 newFood.setPopularity(partyFood.getPopularity());
                 newFood.setPrice(partyFood.getPrice());
                 menu.add(newFood);
+                System.out.println(name);
+                System.out.println(id);
+                System.out.println(newFood.getName());
             }
         }
     }
