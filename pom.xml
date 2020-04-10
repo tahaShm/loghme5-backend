@@ -45,6 +45,11 @@
             <version>0.0.20131108.vaadin1</version>
             <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId>org.ebaysf.web</groupId>
+			<artifactId>cors-filter</artifactId>
+			<version>1.0.0</version>
+		</dependency>
     </dependencies>
 
 	<build>
