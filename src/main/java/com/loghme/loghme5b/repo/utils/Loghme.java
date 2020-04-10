@@ -203,10 +203,15 @@ public class Loghme
         Restaurant currentRestaurant = customer.getCurrentOrder().getRestaurant();
         if (cartPrice > customer.getCredit()) {
             customer.emptyCurrentOrder();
-
             throw new NotEnoughCreditExp();
         }
-        currentRestaurant.reducePartyFoodAmounts(customer.getCurrentOrder());
+        try {
+            currentRestaurant.reducePartyFoodAmounts(customer.getCurrentOrder());
+        }
+        catch (ExtraFoodPartyExp e) {
+            customer.emptyCurrentOrder();
+            throw new ExtraFoodPartyExp();
+        }
         customer.getCurrentOrder().setStatus("finding delivery");
 
         Timer timer = new Timer();
@@ -266,12 +271,12 @@ public class Loghme
         throw new FoodNotFoundExp();
     }
 
-    public PartyFood getPartyFoodByName(String foodName, Restaurant restaurant) {
+    public PartyFood getPartyFoodByName(String foodName, Restaurant restaurant) throws FoodNotFoundExp {
         for (PartyFood partyFood: restaurant.getPartyFoods()) {
             if (partyFood.getName().equals(foodName))
                 return partyFood;
         }
-        return null;
+        throw new FoodNotFoundExp();
     }
 
     public void deletePreviousPartyFoods(){

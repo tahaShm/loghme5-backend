@@ -182,8 +182,13 @@ public class Restaurant {
         }
         for (Map.Entry<PartyFood, Integer> entry: currentOrder.getPartyFoods().entrySet()) {
             PartyFood currentPartyFood = sendPartyFoodByName(entry.getKey().getName());
-            if (currentPartyFood != null)
+            if (currentPartyFood != null) {
+                if (currentPartyFood.getCount() - entry.getValue() == 0) {
+                    partyFoods.remove(currentPartyFood);
+                    return;
+                }
                 currentPartyFood.setCount(currentPartyFood.getCount() - entry.getValue());
+            }
         }
     }
 }
