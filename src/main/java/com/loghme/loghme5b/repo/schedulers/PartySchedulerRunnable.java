@@ -25,14 +25,5 @@ public class PartySchedulerRunnable implements Runnable {
         }
         ArrayList<Restaurant> partyRestaurants = nameMapper.convertValue(tempRestaurants, new TypeReference<ArrayList<Restaurant>>() { });
         Loghme.getInstance().addPartyRestaurants(partyRestaurants);
-        for (Restaurant restaurant: partyRestaurants) {
-            System.out.println("---restaurant name---" + restaurant.getName());
-            System.out.println(restaurant.getId());
-            System.out.println("---Party Foods---");
-            for (PartyFood partyFood: restaurant.getPartyFoods()) {
-                System.out.println(partyFood.getName());
-                System.out.println(partyFood.getCount());
-            }
-        }
     }
 }

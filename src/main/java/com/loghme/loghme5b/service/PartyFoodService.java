@@ -1,7 +1,6 @@
 package com.loghme.loghme5b.service;
 
 import com.loghme.loghme5b.BadRequestException;
-import com.loghme.loghme5b.repo.utils.Food;
 import com.loghme.loghme5b.repo.utils.Loghme;
 import com.loghme.loghme5b.repo.utils.PartyFood;
 import com.loghme.loghme5b.repo.utils.Restaurant;
