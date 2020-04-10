@@ -96,7 +96,7 @@ public class Customer {
                 throw new ExtraFoodPartyExp();
         else if (count > partyFood.getCount())
             throw new ExtraFoodPartyExp();
-        currentOrder.addPartyFood(partyFood);
+        currentOrder.addPartyFood(partyFood, count);
     }
 
     public void emptyCurrentOrder() {currentOrder = null;}

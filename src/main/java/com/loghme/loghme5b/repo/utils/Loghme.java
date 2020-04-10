@@ -202,7 +202,6 @@ public class Loghme
         int cartPrice = customer.cartOverallPrice();
         Restaurant currentRestaurant = customer.getCurrentOrder().getRestaurant();
         if (cartPrice > customer.getCredit()) {
-//            currentRestaurant.restorePreviousPartyCounts(customer.getCurrentOrder());
             customer.emptyCurrentOrder();
 
             throw new NotEnoughCreditExp();
@@ -301,18 +300,6 @@ public class Loghme
             }
             currentRestaurant.updateMenu();
         }
-//        for (Restaurant restaurant: getRestaurants()) {
-//            System.out.println("---Restaurant Name---");
-//            System.out.println(restaurant.getName());
-//            System.out.println(restaurant.getId());
-//            System.out.println("---Menu---");
-//            for (PartyFood food: restaurant.getPartyFoods()) {
-//                System.out.println("party" + food.getName());
-//            }
-//            for (Food food: restaurant.getMenu()) {
-//                System.out.println(food.getName());
-//            }
-//        }
     }
 
     public ArrayList<Restaurant> getClosePartyRestaurants(float distance){

@@ -75,11 +75,11 @@ public class Order {
             throw new FoodNotFoundExp();
     }
 
-    public void addPartyFood(PartyFood partyFood) {
+    public void addPartyFood(PartyFood partyFood, int count) {
         if (partyFoods.containsKey(partyFood))
-            partyFoods.put(partyFood, partyFoods.get(partyFood) + 1);
+            partyFoods.put(partyFood, partyFoods.get(partyFood) + count);
         else
-            partyFoods.put(partyFood, 1);
+            partyFoods.put(partyFood, count);
     }
 
     public int overallPrice() {
