@@ -80,12 +80,22 @@ public class Customer {
 
     public void removeFoodFromCurrentOrder(Food food, int count) throws FoodNotFoundExp, NotEnoughFoodToDelete {
         currentOrder.removeFood(food, count);
+        if (currentOrder.getFoods().isEmpty() && currentOrder.getPartyFoods().isEmpty())
+            currentOrder = null;
     }
 
-    public void addPartyFoodToCurrentOrder(PartyFood partyFood) throws ExtraFoodPartyExp {
+    public void removePartyFoodFromCurrentOrder(PartyFood food, int count) throws FoodNotFoundExp, NotEnoughFoodToDelete {
+        currentOrder.removePartyFood(food, count);
+        if (currentOrder.getFoods().isEmpty() && currentOrder.getPartyFoods().isEmpty())
+            currentOrder = null;
+    }
+
+    public void addPartyFoodToCurrentOrder(PartyFood partyFood, int count) throws ExtraFoodPartyExp {
         if (currentOrder.getPartyFoods().containsKey(partyFood))
-            if (currentOrder.getPartyFoods().get(partyFood) + 1 > partyFood.getCount())
+            if (currentOrder.getPartyFoods().get(partyFood) + count > partyFood.getCount())
                 throw new ExtraFoodPartyExp();
+        else if (count > partyFood.getCount())
+            throw new ExtraFoodPartyExp();
         currentOrder.addPartyFood(partyFood);
     }
 

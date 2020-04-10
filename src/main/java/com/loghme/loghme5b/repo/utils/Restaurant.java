@@ -133,6 +133,10 @@ public class Restaurant {
         throw new FoodNotFoundExp();
     }
 
+    public void addPartyFoods(ArrayList<PartyFood> newPartyFoods) {
+        partyFoods.addAll(newPartyFoods);
+    }
+
     public void updateMenu() {
         for (PartyFood partyFood: partyFoods) {
             if (foodIdx(partyFood.getName()) == -1) {
@@ -143,9 +147,6 @@ public class Restaurant {
                 newFood.setPopularity(partyFood.getPopularity());
                 newFood.setPrice(partyFood.getPrice());
                 menu.add(newFood);
-                System.out.println(name);
-                System.out.println(id);
-                System.out.println(newFood.getName());
             }
         }
     }

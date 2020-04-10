@@ -157,7 +157,6 @@ public class Loghme
 
     public void addToCart(Restaurant restaurant, String foodName, int count, boolean isPartyFood) throws FoodFromOtherRestaurantInCartExp, ExtraFoodPartyExp, FoodNotFoundExp {
         boolean allowToAdd = false;
-        Food food = getFoodByName(foodName, restaurant);
         if (customer.getCurrentOrder() == null) {
             Order newOrder = new Order(lastOrderId, restaurant);
             customer.setCurrentOrder(newOrder);
@@ -169,10 +168,14 @@ public class Loghme
                 allowToAdd = true;
         }
         if (allowToAdd) {
-            if (food instanceof PartyFood && isPartyFood)
-                customer.addPartyFoodToCurrentOrder((PartyFood) food);
-            else
+            if (isPartyFood) {
+                PartyFood partyFood = getPartyFoodByName(foodName, restaurant);
+                customer.addPartyFoodToCurrentOrder(partyFood, count);
+            }
+            else {
+                Food food = getFoodByName(foodName, restaurant);
                 customer.addFoodToCurrentOrder(food, count);
+            }
         }
         else
             throw new FoodFromOtherRestaurantInCartExp();
@@ -181,12 +184,14 @@ public class Loghme
     public void removeFromCart(Restaurant restaurant, String foodName, int count, boolean isPartyFood) throws FoodFromOtherRestaurantInCartExp, NotEnoughFoodToDelete, FoodNotFoundExp {
         if (!restaurant.getId().equals(customer.getCurrentOrder().getRestaurant().getId()))
             throw new FoodFromOtherRestaurantInCartExp();
-        Food food;
-        if (isPartyFood)
-            food = getPartyFoodByName(foodName, restaurant);
-        else
-            food = getFoodByName(foodName, restaurant);
-        customer.removeFoodFromCurrentOrder(food, count);
+        if (isPartyFood) {
+            PartyFood partyFood = getPartyFoodByName(foodName, restaurant);
+            customer.removePartyFoodFromCurrentOrder(partyFood, count);
+        }
+        else {
+            Food food = getFoodByName(foodName, restaurant);
+            customer.removeFoodFromCurrentOrder(food, count);
+        }
     }
 
     public String getCartJson() throws IOException {
@@ -289,6 +294,7 @@ public class Loghme
             Restaurant currentRestaurant = null;
             try {
                 currentRestaurant = getRestaurantById(restaurant.getId());
+                currentRestaurant.addPartyFoods(restaurant.getPartyFoods());
             } catch (NotFound404Exp notFound404Exp) {
                 currentRestaurant = restaurant;
                 restaurants.add(restaurant);
@@ -300,11 +306,11 @@ public class Loghme
 //            System.out.println(restaurant.getName());
 //            System.out.println(restaurant.getId());
 //            System.out.println("---Menu---");
+//            for (PartyFood food: restaurant.getPartyFoods()) {
+//                System.out.println("party" + food.getName());
+//            }
 //            for (Food food: restaurant.getMenu()) {
-//                if (food instanceof PartyFood)
-//                    System.out.println("party food: " + food.getName());
-//                else
-//                    System.out.println(food.getName());
+//                System.out.println(food.getName());
 //            }
 //        }
     }

@@ -62,6 +62,19 @@ public class Order {
             throw new FoodNotFoundExp();
     }
 
+    public void removePartyFood(PartyFood partyFood, int count) throws FoodNotFoundExp, NotEnoughFoodToDelete {
+        if (partyFoods.containsKey(partyFood)) {
+            if (count > partyFoods.get(partyFood))
+                throw new NotEnoughFoodToDelete();
+            else if (partyFoods.get(partyFood) == count)
+                partyFoods.remove(partyFood);
+            else
+                partyFoods.put(partyFood, partyFoods.get(partyFood) - count);
+        }
+        else
+            throw new FoodNotFoundExp();
+    }
+
     public void addPartyFood(PartyFood partyFood) {
         if (partyFoods.containsKey(partyFood))
             partyFoods.put(partyFood, partyFoods.get(partyFood) + 1);
