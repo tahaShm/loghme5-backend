@@ -41,6 +41,8 @@ public class FoodService {
         catch (Exception e) {
             throw new BadRequestException();
         }
+        if (loghme.getCustomer().getCurrentOrder() == null)
+            return null;
         return loghme.getCustomer().getCurrentOrder().getFoodsInOrder();
     }
 
