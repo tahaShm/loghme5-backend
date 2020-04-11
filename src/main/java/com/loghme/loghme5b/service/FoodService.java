@@ -1,9 +1,7 @@
 package com.loghme.loghme5b.service;
 
 import com.loghme.loghme5b.BadRequestException;
-import com.loghme.loghme5b.repo.utils.Food;
-import com.loghme.loghme5b.repo.utils.Loghme;
-import com.loghme.loghme5b.repo.utils.Restaurant;
+import com.loghme.loghme5b.repo.utils.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +14,7 @@ public class FoodService {
 
     @RequestMapping(value = "/food/{id}", method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addFood(
+    public ArrayList<FoodInOrder> addFood(
             @PathVariable(value = "id") String id,
             @RequestParam(value = "foodName") String foodName,
             @RequestParam(value = "count") int count) {
@@ -27,12 +25,12 @@ public class FoodService {
         catch (Exception e) {
             throw new BadRequestException();
         }
-        return ResponseEntity.ok(null);
+        return loghme.getCustomer().getCurrentOrder().getFoodsInOrder();
     }
 
     @RequestMapping(value = "/food/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteFood(
+    public ArrayList<FoodInOrder> deleteFood(
             @PathVariable(value = "id") String id,
             @RequestParam(value = "foodName") String foodName,
             @RequestParam(value = "count") int count) {
@@ -43,7 +41,7 @@ public class FoodService {
         catch (Exception e) {
             throw new BadRequestException();
         }
-        return ResponseEntity.ok(null);
+        return loghme.getCustomer().getCurrentOrder().getFoodsInOrder();
     }
 
     @RequestMapping(value = "/food", method = RequestMethod.GET,
@@ -52,7 +50,6 @@ public class FoodService {
             @RequestParam(value = "id") String id) {
         ArrayList<Food> foods = null;
         try {
-            Restaurant restaurant = loghme.getRestaurantById(id);
             foods = loghme.getRestaurantFoods(id);
         }
         catch (Exception e) {

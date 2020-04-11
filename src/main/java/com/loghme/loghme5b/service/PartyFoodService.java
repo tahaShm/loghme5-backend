@@ -1,6 +1,7 @@
 package com.loghme.loghme5b.service;
 
 import com.loghme.loghme5b.BadRequestException;
+import com.loghme.loghme5b.repo.utils.FoodInOrder;
 import com.loghme.loghme5b.repo.utils.Loghme;
 import com.loghme.loghme5b.repo.utils.PartyFood;
 import com.loghme.loghme5b.repo.utils.Restaurant;
@@ -16,7 +17,7 @@ public class PartyFoodService {
 
     @RequestMapping(value = "/partyFood/{id}", method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addFood(
+    public ArrayList<FoodInOrder> addFood(
             @PathVariable(value = "id") String id,
             @RequestParam(value = "foodName") String foodName,
             @RequestParam(value = "count") int count) {
@@ -27,12 +28,12 @@ public class PartyFoodService {
         catch (Exception e) {
             throw new BadRequestException();
         }
-        return ResponseEntity.ok(null);
+        return loghme.getCustomer().getCurrentOrder().getFoodsInOrder();
     }
 
     @RequestMapping(value = "/partyFood/{id}", method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteFood(
+    public ArrayList<FoodInOrder> deleteFood(
             @PathVariable(value = "id") String id,
             @RequestParam(value = "foodName") String foodName,
             @RequestParam(value = "count") int count) {
@@ -43,7 +44,7 @@ public class PartyFoodService {
         catch (Exception e) {
             throw new BadRequestException();
         }
-        return ResponseEntity.ok(null);
+        return loghme.getCustomer().getCurrentOrder().getFoodsInOrder();
     }
 
     @RequestMapping(value = "/partyFood", method = RequestMethod.GET,

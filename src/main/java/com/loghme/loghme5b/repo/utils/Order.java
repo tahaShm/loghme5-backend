@@ -3,6 +3,7 @@ package com.loghme.loghme5b.repo.utils;
 import com.loghme.loghme5b.repo.utils.exceptions.FoodNotFoundExp;
 import com.loghme.loghme5b.repo.utils.exceptions.NotEnoughFoodToDelete;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,5 +96,18 @@ public class Order {
 
     public void clearPartyFoods() {
         partyFoods.clear();
+    }
+
+    public ArrayList<FoodInOrder> getFoodsInOrder() {
+        ArrayList<FoodInOrder> toReturn = new ArrayList<>();
+        for (Map.Entry<Food, Integer> entry: foods.entrySet()) {
+            Food currFood = entry.getKey();
+            toReturn.add(new FoodInOrder(currFood.getName(), currFood.getPrice(), entry.getValue()));
+        }
+        for (Map.Entry<PartyFood, Integer> entry: partyFoods.entrySet()) {
+            PartyFood currFood = entry.getKey();
+            toReturn.add(new FoodInOrder(currFood.getName(), currFood.getPrice(), entry.getValue()));
+        }
+        return  toReturn;
     }
 }
