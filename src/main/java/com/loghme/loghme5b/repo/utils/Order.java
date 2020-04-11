@@ -106,7 +106,7 @@ public class Order {
         }
         for (Map.Entry<PartyFood, Integer> entry: partyFoods.entrySet()) {
             PartyFood currFood = entry.getKey();
-            toReturn.add(new FoodInOrder(currFood.getName(), currFood.getPrice(), entry.getValue()));
+            toReturn.add(new FoodInOrder(currFood.getName(), currFood.getNewPrice(), entry.getValue()));
         }
         return  toReturn;
     }
