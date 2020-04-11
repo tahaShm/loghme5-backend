@@ -22,8 +22,6 @@ public class RestaurantService {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Restaurant getRestaurantById(
             @PathVariable(value = "id") String id) {
-        for (Restaurant restaurant: loghme.getRestaurants())
-            System.out.println(restaurant.getName() + " : " + restaurant.getId());
         try {
             return loghme.getRestaurantById(id);
         }
