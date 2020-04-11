@@ -130,4 +130,13 @@ public class Customer {
                 currentOrder = null;
         }
     }
+
+    public ArrayList<OrderList> getOrdersLists() {
+        ArrayList<OrderList> toReturn = new ArrayList<>();
+        for (Order order: orders) {
+            OrderList orderList = new OrderList(order.getStatus(), order.getRestaurant().getName(), order.getFoodsInOrder());
+            toReturn.add(orderList);
+        }
+        return toReturn;
+    }
 }

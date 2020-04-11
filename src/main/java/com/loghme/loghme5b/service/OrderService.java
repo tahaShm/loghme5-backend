@@ -1,9 +1,8 @@
 package com.loghme.loghme5b.service;
 
 import com.loghme.loghme5b.BadRequestException;
-import com.loghme.loghme5b.repo.utils.Customer;
 import com.loghme.loghme5b.repo.utils.Loghme;
-import com.loghme.loghme5b.repo.utils.Order;
+import com.loghme.loghme5b.repo.utils.OrderList;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +14,8 @@ public class OrderService {
 
     @RequestMapping(value = "/order", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ArrayList<Order> getOrders() {
-        return loghme.getCustomer().getOrders();
+    public ArrayList<OrderList> getOrders() {
+        return loghme.getCustomer().getOrdersLists();
     }
 
     @RequestMapping(value = "/order", method = RequestMethod.PUT,
