@@ -324,4 +324,13 @@ public class Loghme
         }
         return foods;
     }
+
+    public ArrayList<RestaurantPartyFood> getRestaurantPartyFoods() {
+        ArrayList<RestaurantPartyFood> foods = new ArrayList<>();
+        for (Restaurant restaurant: restaurants) {
+            for (PartyFood partyFood: restaurant.getPartyFoods())
+                foods.add(new RestaurantPartyFood(partyFood, restaurant.getName(), restaurant.getId()));
+        }
+        return foods;
+    }
 }
